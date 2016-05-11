@@ -1,3 +1,8 @@
-import config
+import os
+from libs.configobj import ConfigObj
 
-print config.test
+config_file = os.path.join(os.getenv('HOME'), ".Slx7hS3ns3onLinux.cfg")
+config = ConfigObj(config_file)
+
+
+print config['PARSER']['timestamp']['enable']
