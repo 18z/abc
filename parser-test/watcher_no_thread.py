@@ -7,7 +7,6 @@ from core.plugins import __modules__
 
 class ClipboardWatcher(object):
     def __init__(self, pause):
-        super(ClipboardWatcher, self).__init__()
         self._pause = pause
         self._stopping = False
 
