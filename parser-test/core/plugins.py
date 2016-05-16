@@ -1,6 +1,6 @@
 def load_modules():
 
-    from print_url import print_url
+    from module.print_url import print_url
     plugins = dict()
 
     urltp = print_url()

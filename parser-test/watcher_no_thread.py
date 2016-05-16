@@ -2,8 +2,8 @@ import time
 import threading
 import pyperclip
 
-from parser import __parser__
-from plugins import __modules__
+from core.parser import __parser__
+from core.plugins import __modules__
 
 class ClipboardWatcher(object):
     def __init__(self, pause):

@@ -1,4 +1,4 @@
-from abstracts import Module
+from common.abstracts import Module
 
 class print_url(Module):
 
