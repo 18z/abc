@@ -1,5 +1,4 @@
 import time
-import threading
 import pyperclip
 
 from core.parser import __parser__
@@ -9,7 +8,7 @@ def process(clipboard_content):
     if __parser__.url(clipboard_content) is True:
         __modules__['print_url'].run(clipboard_content)
     else:
-        print "print from watcher.run() "+clipboard_content
+        print clipboard_content
 
 class ClipboardWatcher(object):
     def __init__(self, pause):
