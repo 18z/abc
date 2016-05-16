@@ -5,6 +5,12 @@ import pyperclip
 from core.parser import __parser__
 from core.plugins import __modules__
 
+def process(clipboard_content):
+    if __parser__.url(clipboard_content) is True:
+        __modules__['print_url'].run(clipboard_content)
+    else:
+        print "print from watcher.run() "+clipboard_content
+
 class ClipboardWatcher(object):
     def __init__(self, pause):
         self._pause = pause
@@ -15,9 +21,7 @@ class ClipboardWatcher(object):
         while not self._stopping:
             if pyperclip.paste() != recent_value:
                 recent_value = pyperclip.paste()
-                print "print from watcher.run() "+recent_value
-                if __parser__.url(pyperclip.paste()) is True:
-                    __modules__['print_url'].run(pyperclip.paste())
+                process(recent_value)
             time.sleep(self._pause)
 
     def stop(self):
@@ -26,7 +30,7 @@ class ClipboardWatcher(object):
 if __name__ == "__main__":
 
     watcher = ClipboardWatcher(1)
-    watcher.run() # same as calling watcher.run()
+    watcher.run()
 
     while True:
         try:
