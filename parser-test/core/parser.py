@@ -1,3 +1,5 @@
+import datetime
+
 class parser(object):
 
     def __init__(clipboard_content):
@@ -11,5 +13,14 @@ class parser(object):
             return True
         else:
             return False
+
+    def timestamp(self, content):
+
+        try:
+            datetime.datetime.fromtimestamp(float(content))
+            return True
+        except:
+            return False
+
 
 __parser__ = parser()

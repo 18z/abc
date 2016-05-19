@@ -3,14 +3,19 @@ import pyperclip
 
 from core.parser import __parser__
 from core.plugins import __modules__
+from common.colors import *
 
 def process(clipboard_content):
+
     if __parser__.url(clipboard_content) is True:
         __modules__['print_url'].run(clipboard_content)
+    elif __parser__.timestamp(clipboard_content) is True:
+        __modules__['print_timestamp'].run(clipboard_content)
     else:
-        print clipboard_content
+        print red(clipboard_content + " not in patterns")
 
 class ClipboardWatcher(object):
+
     def __init__(self, pause):
         self._pause = pause
         self._stopping = False
