@@ -38,12 +38,10 @@ if __name__ == "__main__":
 
     watcher = ClipboardWatcher(1)
     call(["xsel", "-bc"])
-    watcher.run()
 
     while True:
         try:
-            # print "Waiting for changed clipboard..."
-            time.sleep(5)
+            watcher.run()
         except KeyboardInterrupt:
             watcher.stop()
             break
