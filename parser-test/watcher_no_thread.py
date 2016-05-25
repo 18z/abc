@@ -4,6 +4,7 @@ import pyperclip
 from core.parser import __parser__
 from core.plugins import __modules__
 from common.colors import red
+from subprocess import call
 
 
 def process(clipboard_content):
@@ -36,6 +37,7 @@ class ClipboardWatcher(object):
 if __name__ == "__main__":
 
     watcher = ClipboardWatcher(1)
+    call(["xsel", "-bc"])
     watcher.run()
 
     while True:
