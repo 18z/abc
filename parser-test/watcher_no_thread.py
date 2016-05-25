@@ -3,7 +3,8 @@ import pyperclip
 
 from core.parser import __parser__
 from core.plugins import __modules__
-from common.colors import *
+from common.colors import red
+
 
 def process(clipboard_content):
 
@@ -13,6 +14,7 @@ def process(clipboard_content):
         __modules__['print_timestamp'].run(clipboard_content)
     else:
         print red(clipboard_content + " not in patterns")
+
 
 class ClipboardWatcher(object):
 
