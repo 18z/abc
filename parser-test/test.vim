@@ -1,6 +1,5 @@
 function! Sixense()
-
-    python << EOF
+python << EOF
 import vim
 import time
 import pyperclip
@@ -21,10 +20,6 @@ def process(clipboard_content):
     else:
         print clipboard_content + " ----->>  not in patterns"
 
-
-process(clipboard_content)
-
+process(pyperclip.paste())
 EOF
-
-
 endfunc
