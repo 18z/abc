@@ -35,6 +35,12 @@ soup = BeautifulSoup.BeautifulSoup(urllib.urlopen(s1))
 #         print(a.get('href'))
 
 
+def _get_d_url(durl):
+    # durl = "http://m.apk.tw/app/com.android.vending/"
+    soup = BeautifulSoup.BeautifulSoup(urllib.urlopen(durl))
+    dclass = soup.find("div", {"class": "download"})
+    print " o " + dclass.find("a").get('href')
+
 w240 = soup.findAll("div", {"class": "w240 mt-12 mr-15"})[0]
 print w240.find("div", {"class": "title"}).h3.string
 tab = w240.findAll("div", {"class": "tab"})
@@ -43,4 +49,6 @@ print tab[0].span.string
 toplist = w240.findAll("div", {"class": "toplist ami"})
 for url in toplist[0].findAll("a"):
     if url.get('class') == "down":
-        print(url.get('href'))
+        print " x " + (url.get('href'))
+        fakeurl = url.get('href')
+        _get_d_url(fakeurl)
