@@ -50,8 +50,7 @@ def daily_apks():
     from core.db.Mongo import DB
 
     today = datetime.datetime.strftime(
-        datetime.datetime.today() -
-        datetime.timedelta(days=1), '%Y-%m-%d')
+        datetime.datetime.today(), '%Y-%m-%d')
     db_result = list(DB().get_apk({'submit_date': today}))
 
     categories_result = daily_apks_by_categories(db_result)
@@ -122,6 +121,6 @@ def download_apk():
 
     response = make_response(apkdata)
     response.headers['Content-Type'] = 'application/vnd.android.package-archive'
-    response.headers['Content-Disposition'] = 'attachment; filename='+apk_info['pgname']+".apk"
+    response.headers['Content-Disposition'] = 'attachment; filename=' + apk_info['pgname'] + ".apk"
 
     return response
