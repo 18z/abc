@@ -1,9 +1,6 @@
 # import logging
-# import argparse
-from datetime import datetime, timedelta
+from datetime import datetime
 # from progress.bar import Bar
-
-# from core.config import import *
 
 from core.db.Mongo import DB
 from common.objects import File
@@ -12,29 +9,18 @@ from common.objects import File
 import urllib
 import BeautifulSoup
 
-s = "http://m.apk.tw"
 s1 = "http://m.apk.tw/top"
 
-today = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+today = datetime.now().strftime('%Y-%m-%d')
 
 soup = BeautifulSoup.BeautifulSoup(urllib.urlopen(s1))
 
 
 def insert_into_db(result):
-    # try:
     DB().insert_apk(result)
-    # bar.next()
-    # except KeyError:
-    #     logging.warn(
-    #         "Maybe the apk already exists: {}".format(result['pgname']))
-    # continue
-    #     raise
-    # except:
-    #     logging.error("DB insert error: {}".format(result['pgname']))
-    # raise
 
 
-def generate_apk_info(targetapk):
+def generate_apk_info(targetapk, rank):
 
     result = {}
     result['vt_scan'] = False
@@ -43,11 +29,12 @@ def generate_apk_info(targetapk):
     result['title'] = category
     result['sub_title'] = subcategory
     result['name'] = unicode(apk_name).encode('utf8')
-    result['rank'] = ""
+    result['rank'] = rank
     result['pgname'] = pkg_name
     result['version'] = version
     result['size'] = size
     result['upload_date'] = ""
+
     # Download APK
     result['apkdata'] = targetapk.read()
 
@@ -66,8 +53,6 @@ def generate_apk_info(targetapk):
 def _download_apk(dlink):
     targetapk = urllib.urlopen(dlink)
     return targetapk
-    # with open('target.apk', 'wb') as output:
-    #     output.write(targetapk.read())
 
 
 def _get_d_url(durl):
@@ -109,9 +94,10 @@ print subcategory
 
 # download list
 toplist = w240.findAll("div", {"class": "toplist ami"})
+
+rank = 1
 for url in toplist[0].findAll("a"):
     if url.get('class') == "down":
-        # print " x " + (url.get('href'))
         # slicing package name
         pkg_name = url.get('href')[20:][:-1]
 
@@ -120,5 +106,6 @@ for url in toplist[0].findAll("a"):
         targetapk = _download_apk(dlink)
         apk_name = _get_apk_name(fakeurl)
         version, size = _get_apk_attr(fakeurl)
-        result = generate_apk_info(targetapk)
+        result = generate_apk_info(targetapk, rank)
         insert_into_db(result)
+        rank += 1
