@@ -1,11 +1,5 @@
-# import logging
+# -*- coding: UTF-8 -*-
 from datetime import datetime
-# from progress.bar import Bar
-
-from core.db.Mongo import DB
-from common.objects import File
-# from common.helpers import sizeof_fmt, print_header_line, print_result_line
-
 import urllib
 import BeautifulSoup
 
@@ -14,54 +8,6 @@ s1 = "http://m.apk.tw/top"
 today = datetime.now().strftime('%Y-%m-%d')
 
 soup = BeautifulSoup.BeautifulSoup(urllib.urlopen(s1))
-
-
-def insert_into_db(result):
-    DB().insert_apk(result)
-
-
-def generate_apk_info(targetapk, rank):
-
-    result = {}
-    result['vt_scan'] = False
-    result['submit_date'] = today
-    result['source'] = 'm.apk'
-    result['title'] = category
-    result['sub_title'] = subcategory
-    result['name'] = unicode(apk_name).encode('utf8')
-    result['rank'] = rank
-    result['pgname'] = pkg_name
-    # result['version'] = version
-    # result['size'] = size
-    result['upload_date'] = ""
-
-    # Download APK
-    result['apkdata'] = targetapk.read()
-
-    # Calculate file hashes
-    result.update(File(result['apkdata']).result)
-
-    print ' N ' + result['name']
-    print ' V ' + result['version']
-    print ' M ' + result['md5']
-    print ' S ' + result['size']
-    print ' P ' + result['pgname'] + "\n"
-
-    return result
-
-
-def _download_apk(dlink):
-    targetapk = urllib.urlopen(dlink)
-    return targetapk
-
-
-def _get_d_url(durl):
-    soup = BeautifulSoup.BeautifulSoup(urllib.urlopen(durl))
-    dclass = soup.find("div", {"class": "download"})
-    print " o " + dclass.find("a").get('href')
-    dlink = dclass.find("a").get('href')
-
-    return dlink
 
 
 def _get_apk_name(durl):
@@ -76,44 +22,38 @@ def _get_apk_attr(durl):
     soup = BeautifulSoup.BeautifulSoup(urllib.urlopen(durl))
     ppt = soup.find("div", {"class": "property mt-10"})
     ppts = ppt.findAll("li")
-    version = ppts[0].string
+    version = ppts[0].string.replace(u'版本：', "", 2)
+    version = version.replace(":", "")
+    version = version.replace(u'版本:', "")
+    version = version.replace(u'版本', "")
     size = ppts[1].string
 
     return version, size
 
-
-for cat in range(0, 5):
+for cat in range(0, 6):
     # category
     w240 = soup.findAll("div", {"class": "w240 mt-12 mr-15"})[cat]
     category = w240.find("div", {"class": "title"}).h3.string
     print category
 
     for ts in range(0, 2):
-        print ts
         # sub-category
         tab = w240.findAll("div", {"class": "tab"})
-        # subcategory = tab[0].span.string
         spans = w240.findAll('span')
         # print subcategory
-        # print tab
-        print spans[1].string
+        print spans[ts].string
 
         # download list
         toplist = w240.findAll("div", {"class": "toplist ami"})
 
-        # rank = 1
+        for url in toplist[ts].findAll("a"):
+            if url.get('class') == "down":
+                # slicing package name
+                # pkg_name = url.get('href')[20:][:-1]
 
-        # for url in toplist[0].findAll("a"):
-        #     if url.get('class') == "down":
-        # slicing package name
-        #         pkg_name = url.get('href')[20:][:-1]
-        #
-        #         fakeurl = url.get('href')
-        #         dlink = _get_d_url(fakeurl)
-        # targetapk = _download_apk(dlink)
-        #         apk_name = _get_apk_name(fakeurl)
-        #         print apk_name
-        # version, size = _get_apk_attr(fakeurl)
-        # result = generate_apk_info(targetapk, rank)
-        # insert_into_db(result)
-        #         rank += 1
+                fakeurl = url.get('href')
+                # dlink = _get_d_url(fakeurl)
+                # targetapk = _download_apk(dlink)
+                apk_name = _get_apk_name(fakeurl)
+                version, size = _get_apk_attr(fakeurl)
+                print "\t" + apk_name + version
