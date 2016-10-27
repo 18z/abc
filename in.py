@@ -1,35 +1,30 @@
 import inspect
-import sys
+# import sys
 import os
 import androguard
 
 # print inspect.getsourcefile(androguard)
-if "site-packages" in inspect.getsourcefile(androguard):
-    print "third party library"
-else:
-    print "standard library"
-
-print inspect.getsourcefile(os)
-# if "site-packages" in inspect.getsourcefile(sys):
+# if "site-packages" in inspect.getsourcefile(androguard):
 #     print "third party library"
 # else:
 #     print "standard library"
-
-# print sys.modules.keys()
-
-import types
+#
+# print inspect.getsourcefile(os)
 
 
-def imports():
-    for name, val in globals().items():
-        print name
-        # if isinstance(val, types.ModuleType):
-        # yield val.__name__
-        # print val.__name__
+test = '123'
 
-imports
 
-for i in range(0, len(globals().items())):
-    print globals().items()[i][1]
+def teeee():
+    import os
+    jeeee = "456"
+    # print jeeee
+    # print locals()
+    print globals()
 
-# list(imports)
+# print globals()
+# print "---------------"
+# print locals()
+teeee()
+
+# print hello.g
